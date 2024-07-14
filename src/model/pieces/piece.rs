@@ -1,5 +1,17 @@
 use std::fmt::Display;
 
+use crate::model::Board;
+
+pub trait Move {
+    fn available_moves(position: Position, board: &Board) -> Option<Vec<Position>>;
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Position {
+    pub x: usize,
+    pub y: usize,
+}
+
 #[derive(Debug)]
 pub enum PieceType {
     Bishop,
@@ -23,7 +35,7 @@ impl Display for PieceType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PieceColor {
     Black,
     White,

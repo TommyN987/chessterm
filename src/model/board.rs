@@ -1,10 +1,32 @@
 use std::fmt::Display;
 
-use super::{Piece, PieceColor, PieceType};
+use super::{Piece, PieceColor, PieceType, Position};
 
 #[derive(Debug)]
 pub struct Board {
     pub board: [[Option<Piece>; 8]; 8],
+    pub is_piece_selected: bool,
+    pub currently_legal_moves: Option<Vec<Position>>,
+}
+
+impl Board {
+    pub fn is_cell_empty(&self, position: Position) -> bool {
+        let (x, y) = (position.x, position.y);
+
+        match self.board[x][y] {
+            Some(_) => false,
+            None => true,
+        }
+    }
+
+    pub fn get_piece_color_in_position(&self, position: Position) -> Option<PieceColor> {
+        let (x, y) = (position.x, position.y);
+
+        match &self.board[x][y] {
+            Some(piece) => Some(piece.piece_color.clone()),
+            None => None,
+        }
+    }
 }
 
 impl Default for Board {
@@ -56,6 +78,8 @@ impl Default for Board {
                     Some(Piece::new(PieceType::Rook, PieceColor::White)),
                 ],
             ],
+            is_piece_selected: false,
+            currently_legal_moves: None,
         }
     }
 }
