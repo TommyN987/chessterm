@@ -6,10 +6,10 @@ impl Move for Pawn {
     fn available_moves(board: &Board) -> Option<Vec<Position>> {
         board.selected_position.as_ref()?;
 
-        let (x, y) = (
-            board.selected_position.clone().unwrap().x,
-            board.selected_position.clone().unwrap().y,
-        );
+        let (x, y) = match &board.selected_position {
+            Some(pos) => (pos.x, pos.y),
+            None => return None,
+        };
 
         let legal_moves = match &board.board[x][y] {
             Some(piece) => match piece.piece_color {
@@ -19,7 +19,7 @@ impl Move for Pawn {
             None => vec![],
         };
 
-        if !legal_moves.is_empty() {
+        if legal_moves.is_empty() {
             None
         } else {
             Some(legal_moves)
