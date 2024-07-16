@@ -5,27 +5,19 @@ use super::{Piece, PieceColor, PieceType, Position};
 #[derive(Debug)]
 pub struct Board {
     pub board: [[Option<Piece>; 8]; 8],
-    pub is_piece_selected: bool,
+    pub selected_position: Option<Position>,
     pub currently_legal_moves: Option<Vec<Position>>,
 }
 
 impl Board {
     pub fn is_cell_empty(&self, position: Position) -> bool {
-        let (x, y) = (position.x, position.y);
-
-        match self.board[x][y] {
-            Some(_) => false,
-            None => true,
-        }
+        self.board[position.x][position.y].is_none()
     }
 
     pub fn get_piece_color_in_position(&self, position: Position) -> Option<PieceColor> {
-        let (x, y) = (position.x, position.y);
-
-        match &self.board[x][y] {
-            Some(piece) => Some(piece.piece_color.clone()),
-            None => None,
-        }
+        self.board[position.x][position.y]
+            .as_ref()
+            .map(|piece| piece.piece_color)
     }
 }
 
@@ -78,7 +70,18 @@ impl Default for Board {
                     Some(Piece::new(PieceType::Rook, PieceColor::White)),
                 ],
             ],
-            is_piece_selected: false,
+            selected_position: None,
+            currently_legal_moves: None,
+        }
+    }
+}
+
+impl Board {
+    #[cfg(test)]
+    pub fn init_empty() -> Self {
+        Self {
+            board: [[None; 8]; 8],
+            selected_position: None,
             currently_legal_moves: None,
         }
     }
@@ -93,7 +96,7 @@ impl Display for Board {
                     None => write!(f, "[ ]"),
                 }?
             }
-            write!(f, "\n")?;
+            writeln!(f)?;
         }
         Ok(())
     }
