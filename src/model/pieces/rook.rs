@@ -53,7 +53,6 @@ impl Rook {
                 if piece.piece_color != color {
                     legal_moves.push(new_position);
                 }
-                return;
             }
             None => {
                 legal_moves.push(new_position.clone());
