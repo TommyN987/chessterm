@@ -6,6 +6,41 @@ pub trait Move {
     fn available_moves(board: &Board) -> Option<Vec<Position>>;
 }
 
+pub fn explore_moves(
+    position: &Position,
+    legal_moves: &mut Vec<Position>,
+    board: &Board,
+    color: PieceColor,
+    dx: isize,
+    dy: isize,
+) {
+    let new_x = position.x as isize + dx;
+    let new_y = position.y as isize + dy;
+
+    // Base case: check bounds
+    if !(0..=7).contains(&new_x) || !(0..=7).contains(&new_y) {
+        return;
+    }
+
+    let new_position = Position {
+        x: new_x as usize,
+        y: new_y as usize,
+    };
+
+    match board.board[new_x as usize][new_y as usize] {
+        Some(piece) => {
+            // If it's the opponent's piece, allow capture and stop recursion
+            if piece.piece_color != color {
+                legal_moves.push(new_position);
+            }
+        }
+        None => {
+            legal_moves.push(new_position.clone());
+            explore_moves(&new_position, legal_moves, board, color, dx, dy);
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct Position {
     pub x: usize,

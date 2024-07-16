@@ -1,4 +1,4 @@
-use crate::model::{Board, Move, PieceColor, Position};
+use crate::model::{explore_moves, Board, Move, Position};
 
 pub struct Rook;
 
@@ -12,52 +12,15 @@ impl Move for Rook {
             .unwrap();
 
         // Explore moves in all four directions using recursion
-        Self::explore_moves(&selected_position, &mut legal_moves, board, color, 1, 0);
-        Self::explore_moves(&selected_position, &mut legal_moves, board, color, -1, 0);
-        Self::explore_moves(&selected_position, &mut legal_moves, board, color, 0, 1);
-        Self::explore_moves(&selected_position, &mut legal_moves, board, color, 0, -1);
+        explore_moves(&selected_position, &mut legal_moves, board, color, 1, 0);
+        explore_moves(&selected_position, &mut legal_moves, board, color, -1, 0);
+        explore_moves(&selected_position, &mut legal_moves, board, color, 0, 1);
+        explore_moves(&selected_position, &mut legal_moves, board, color, 0, -1);
 
         if legal_moves.is_empty() {
             None
         } else {
             Some(legal_moves)
-        }
-    }
-}
-
-impl Rook {
-    fn explore_moves(
-        position: &Position,
-        legal_moves: &mut Vec<Position>,
-        board: &Board,
-        color: PieceColor,
-        dx: isize,
-        dy: isize,
-    ) {
-        let new_x = position.x as isize + dx;
-        let new_y = position.y as isize + dy;
-
-        // Base case: check bounds
-        if !(0..=7).contains(&new_x) || !(0..=7).contains(&new_y) {
-            return;
-        }
-
-        let new_position = Position {
-            x: new_x as usize,
-            y: new_y as usize,
-        };
-
-        match board.board[new_x as usize][new_y as usize] {
-            Some(piece) => {
-                // If it's the opponent's piece, allow capture and stop recursion
-                if piece.piece_color != color {
-                    legal_moves.push(new_position);
-                }
-            }
-            None => {
-                legal_moves.push(new_position.clone());
-                Self::explore_moves(&new_position, legal_moves, board, color, dx, dy);
-            }
         }
     }
 }

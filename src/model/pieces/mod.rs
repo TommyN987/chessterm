@@ -1,3 +1,4 @@
+pub mod bishop;
 pub mod pawn;
 pub mod piece;
 pub mod rook;
