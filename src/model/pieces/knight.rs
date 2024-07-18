@@ -64,7 +64,7 @@ mod tests {
     #[test]
     fn test_knight_initial_moves() {
         let mut board = Board::default();
-        board.selected_position = Some(Position { x: 7, y: 1 });
+        board.select_position(&Position { x: 7, y: 1 });
 
         let legal_moves = Knight::available_moves(&board).unwrap();
 
@@ -80,7 +80,7 @@ mod tests {
     #[test]
     fn test_knight_no_legal_moves() {
         let mut board = Board::default();
-        board.selected_position = Some(Position { x: 7, y: 1 });
+        board.select_position(&Position { x: 7, y: 1 });
         board.board[5][0] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
         board.board[5][2] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
 
@@ -92,8 +92,8 @@ mod tests {
     #[test]
     fn test_knight_free_board() {
         let mut board = Board::init_empty();
-        board.selected_position = Some(Position { x: 4, y: 4 });
         board.board[4][4] = Some(Piece::new(PieceType::Knight, PieceColor::White));
+        board.select_position(&Position { x: 4, y: 4 });
 
         let legal_moves = Knight::available_moves(&board).unwrap();
 
@@ -118,12 +118,12 @@ mod tests {
     #[test]
     fn test_knight_with_captures_and_blocking_pieces() {
         let mut board = Board::init_empty();
-        board.selected_position = Some(Position { x: 4, y: 4 });
         board.board[4][4] = Some(Piece::new(PieceType::Knight, PieceColor::White));
         board.board[6][5] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
         board.board[5][6] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
         board.board[3][2] = Some(Piece::new(PieceType::Knight, PieceColor::Black));
         board.board[2][3] = Some(Piece::new(PieceType::Knight, PieceColor::Black));
+        board.select_position(&Position { x: 4, y: 4 });
 
         let legal_moves = Knight::available_moves(&board).unwrap();
 

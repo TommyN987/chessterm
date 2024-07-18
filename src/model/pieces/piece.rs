@@ -2,6 +2,8 @@ use std::fmt::Display;
 
 use crate::model::Board;
 
+use super::{bishop::Bishop, king::King, knight::Knight, pawn::Pawn, queen::Queen, rook::Rook};
+
 pub trait Move {
     fn available_moves(board: &Board) -> Option<Vec<Position>>;
 }
@@ -47,7 +49,7 @@ pub struct Position {
     pub y: usize,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum PieceType {
     Bishop,
     King,
@@ -55,6 +57,19 @@ pub enum PieceType {
     Pawn,
     Queen,
     Rook,
+}
+
+impl PieceType {
+    pub fn legal_moves(&self, board: &Board) -> Option<Vec<Position>> {
+        match self {
+            Self::King => King::available_moves(board),
+            Self::Rook => Rook::available_moves(board),
+            Self::Pawn => Pawn::available_moves(board),
+            Self::Bishop => Bishop::available_moves(board),
+            Self::Knight => Knight::available_moves(board),
+            Self::Queen => Queen::available_moves(board),
+        }
+    }
 }
 
 impl Display for PieceType {

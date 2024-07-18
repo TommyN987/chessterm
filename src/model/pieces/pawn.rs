@@ -4,8 +4,6 @@ pub struct Pawn;
 
 impl Move for Pawn {
     fn available_moves(board: &Board) -> Option<Vec<Position>> {
-        board.selected_position.as_ref()?;
-
         let (x, y) = match &board.selected_position {
             Some(pos) => (pos.x, pos.y),
             None => return None,
@@ -114,7 +112,7 @@ mod tests {
     #[test]
     fn test_white_pawn_initial_moves() {
         let mut board = Board::default();
-        board.selected_position = Some(Position { x: 6, y: 3 });
+        board.select_position(&Position { x: 6, y: 3 });
 
         let legal_moves = Pawn::get_legal_moves_for_white(&board);
 
@@ -126,7 +124,7 @@ mod tests {
     #[test]
     fn test_white_pawn_blocked_moves() {
         let mut board = Board::default();
-        board.selected_position = Some(Position { x: 6, y: 3 });
+        board.select_position(&Position { x: 6, y: 3 });
         board.board[5][3] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
 
         let legal_moves = Pawn::get_legal_moves_for_white(&board);
@@ -139,7 +137,8 @@ mod tests {
     #[test]
     fn test_black_pawn_initial_moves() {
         let mut board = Board::default();
-        board.selected_position = Some(Position { x: 1, y: 3 });
+        board.on_turn = PieceColor::Black;
+        board.select_position(&Position { x: 1, y: 3 });
 
         let legal_moves = Pawn::get_legal_moves_for_black(&board);
 
@@ -151,7 +150,8 @@ mod tests {
     #[test]
     fn test_black_pawn_blocked_moves() {
         let mut board = Board::default();
-        board.selected_position = Some(Position { x: 1, y: 3 });
+        board.on_turn = PieceColor::Black;
+        board.select_position(&Position { x: 1, y: 3 });
         board.board[2][3] = Some(Piece::new(PieceType::Pawn, PieceColor::Black));
 
         let legal_moves = Pawn::get_legal_moves_for_black(&board);
@@ -164,9 +164,10 @@ mod tests {
     #[test]
     fn test_white_pawn_capture() {
         let mut board = Board::default();
-        board.selected_position = Some(Position { x: 4, y: 3 });
+        board.board[4][3] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
         board.board[3][2] = Some(Piece::new(PieceType::Pawn, PieceColor::Black));
         board.board[3][4] = Some(Piece::new(PieceType::Pawn, PieceColor::Black));
+        board.select_position(&Position { x: 4, y: 3 });
 
         let legal_moves = Pawn::get_legal_moves_for_white(&board);
 
@@ -182,9 +183,11 @@ mod tests {
     #[test]
     fn test_black_pawn_capture() {
         let mut board = Board::default();
-        board.selected_position = Some(Position { x: 3, y: 3 });
+        board.on_turn = PieceColor::Black;
+        board.board[3][3] = Some(Piece::new(PieceType::Pawn, PieceColor::Black));
         board.board[4][2] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
         board.board[4][4] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
+        board.selected_position = Some(Position { x: 3, y: 3 });
 
         let legal_moves = Pawn::get_legal_moves_for_black(&board);
 

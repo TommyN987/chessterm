@@ -4,8 +4,7 @@ pub struct Bishop;
 
 impl Move for Bishop {
     fn available_moves(board: &Board) -> Option<Vec<Position>> {
-        board.selected_position.as_ref()?;
-        let selected_position = board.selected_position.clone().unwrap();
+        let selected_position = board.selected_position.clone()?;
         let mut legal_moves: Vec<Position> = Vec::with_capacity(13);
         let color = board
             .get_piece_color_in_position(selected_position.clone())
@@ -34,7 +33,7 @@ mod tests {
     #[test]
     fn test_bishop_initial_position() {
         let mut board = Board::default();
-        board.selected_position = Some(Position { x: 7, y: 2 });
+        board.select_position(&Position { x: 7, y: 2 });
 
         let legal_moves = Bishop::available_moves(&board);
 
@@ -45,7 +44,7 @@ mod tests {
     fn test_bishop_free_board() {
         let mut board = Board::init_empty();
         board.board[5][4] = Some(Piece::new(PieceType::Bishop, PieceColor::White));
-        board.selected_position = Some(Position { x: 5, y: 4 });
+        board.select_position(&Position { x: 5, y: 4 });
 
         let legal_moves = Bishop::available_moves(&board).unwrap();
 
@@ -73,8 +72,9 @@ mod tests {
     #[test]
     fn test_bishop_moves_with_capture() {
         let mut board = Board::init_empty();
-        board.selected_position = Some(Position { x: 5, y: 4 });
+        board.on_turn = PieceColor::Black;
         board.board[5][4] = Some(Piece::new(PieceType::Bishop, PieceColor::Black));
+        board.select_position(&Position { x: 5, y: 4 });
         board.board[3][2] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
 
         let legal_moves = Bishop::available_moves(&board).unwrap();
@@ -101,8 +101,9 @@ mod tests {
     #[test]
     fn test_bishop_with_captures_and_blocking_piece() {
         let mut board = Board::init_empty();
-        board.selected_position = Some(Position { x: 5, y: 4 });
+        board.on_turn = PieceColor::Black;
         board.board[5][4] = Some(Piece::new(PieceType::Bishop, PieceColor::Black));
+        board.select_position(&Position { x: 5, y: 4 });
         board.board[3][2] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
         board.board[6][3] = Some(Piece::new(PieceType::Pawn, PieceColor::Black));
         board.board[2][7] = Some(Piece::new(PieceType::Knight, PieceColor::Black));

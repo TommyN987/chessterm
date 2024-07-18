@@ -4,8 +4,7 @@ pub struct Rook;
 
 impl Move for Rook {
     fn available_moves(board: &Board) -> Option<Vec<Position>> {
-        board.selected_position.as_ref()?;
-        let selected_position = board.selected_position.clone().unwrap();
+        let selected_position = board.selected_position.clone()?;
         let mut legal_moves: Vec<Position> = Vec::with_capacity(14);
         let color = board
             .get_piece_color_in_position(selected_position.clone())
@@ -34,7 +33,7 @@ mod tests {
     #[test]
     fn test_rook_initial_position() {
         let mut board = Board::default();
-        board.selected_position = Some(Position { x: 0, y: 0 });
+        board.select_position(&Position { x: 0, y: 0 });
 
         let legal_moves = Rook::available_moves(&board);
 
@@ -44,8 +43,9 @@ mod tests {
     #[test]
     fn test_rook_free_board() {
         let mut board = Board::init_empty();
+        board.on_turn = PieceColor::Black;
         board.board[5][4] = Some(Piece::new(PieceType::Rook, PieceColor::Black));
-        board.selected_position = Some(Position { x: 5, y: 4 });
+        board.select_position(&Position { x: 5, y: 4 });
 
         let legal_moves = Rook::available_moves(&board).unwrap();
 
@@ -76,8 +76,9 @@ mod tests {
     #[test]
     fn test_rook_moves_with_capture() {
         let mut board = Board::init_empty();
-        board.selected_position = Some(Position { x: 5, y: 4 });
+        board.on_turn = PieceColor::Black;
         board.board[5][4] = Some(Piece::new(PieceType::Rook, PieceColor::Black));
+        board.select_position(&Position { x: 5, y: 4 });
         board.board[3][4] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
 
         let legal_moves = Rook::available_moves(&board).unwrap();
@@ -104,8 +105,9 @@ mod tests {
     #[test]
     fn test_rook_moves_with_captures_and_blocking_piece() {
         let mut board = Board::init_empty();
-        board.selected_position = Some(Position { x: 5, y: 4 });
+        board.on_turn = PieceColor::Black;
         board.board[5][4] = Some(Piece::new(PieceType::Rook, PieceColor::Black));
+        board.select_position(&Position { x: 5, y: 4 });
         board.board[6][4] = Some(Piece::new(PieceType::Pawn, PieceColor::Black));
         board.board[3][4] = Some(Piece::new(PieceType::Pawn, PieceColor::White));
         board.board[5][1] = Some(Piece::new(PieceType::Knight, PieceColor::White));

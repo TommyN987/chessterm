@@ -4,8 +4,6 @@ pub struct King;
 
 impl Move for King {
     fn available_moves(board: &Board) -> Option<Vec<Position>> {
-        board.selected_position.as_ref()?;
-
         let (x, y) = match &board.selected_position {
             Some(pos) => (pos.x, pos.y),
             None => return None,
