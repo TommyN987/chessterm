@@ -1,8 +1,9 @@
 use ratatui::{
     buffer::Buffer,
-    layout::{Alignment, Constraint, Direction, Layout, Rect},
+    layout::{Alignment, Constraint, Direction, Flex, Layout, Rect},
     style::{Color, Modifier, Style},
-    widgets::{Block, Borders, List, ListItem, Paragraph, StatefulWidget, Widget},
+    text::Text,
+    widgets::{Block, Borders, List, ListItem, Padding, Paragraph, StatefulWidget, Widget},
     Frame,
 };
 
@@ -51,26 +52,39 @@ impl StatefulWidget for MenuState {
     type State = Self;
 
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
+        let layout = Layout::default()
+            .direction(Direction::Horizontal)
+            .constraints([Constraint::Percentage(50)])
+            .flex(Flex::Center)
+            .split(area);
         let list_items: Vec<ListItem> = state
             .items
             .iter()
             .enumerate()
             .map(|(i, &item)| {
                 if state.selected == i {
-                    ListItem::new(format!("> {}", item)).style(
-                        Style::default()
-                            .fg(Color::Yellow)
-                            .add_modifier(Modifier::BOLD),
-                    )
+                    ListItem::new(Text::from(format!("> {}", item)).alignment(Alignment::Center))
+                        .style(
+                            Style::default()
+                                .fg(Color::Yellow)
+                                .add_modifier(Modifier::BOLD),
+                        )
                 } else {
-                    ListItem::from(item).style(Style::default())
+                    ListItem::new(Text::from(item).alignment(Alignment::Center))
+                        .style(Style::default())
                 }
             })
             .collect();
         let list = List::new(list_items)
-            .block(Block::default().borders(Borders::ALL).title("Menu"))
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .padding(Padding::top(2))
+                    .title("Options")
+                    .title_alignment(Alignment::Center),
+            )
             .style(Style::default().fg(Color::White));
 
-        Widget::render(list, area, buf);
+        Widget::render(list, layout[0], buf);
     }
 }

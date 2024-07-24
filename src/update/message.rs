@@ -76,6 +76,7 @@ impl MessageHandler {
 
         match game.current_screen {
             CurrentScreen::Menu => self.handle_menu_key_events(key_event, game),
+            CurrentScreen::Game => self.handle_game_key_events(key_event, game),
             _ => Ok(()),
         }
     }
@@ -85,9 +86,20 @@ impl MessageHandler {
             KeyCode::Char('q') => game.quit(),
             KeyCode::Up | KeyCode::Char('k') => game.menu_state.previous(),
             KeyCode::Down | KeyCode::Char('j') => game.menu_state.next(),
+            KeyCode::Enter => {
+                game.current_screen = CurrentScreen::Game;
+            }
             _ => {}
         }
 
+        Ok(())
+    }
+
+    fn handle_game_key_events(&self, key_event: KeyEvent, game: &mut Game) -> AppResult<()> {
+        match key_event.code {
+            KeyCode::Char('q') => game.quit(),
+            _ => {}
+        };
         Ok(())
     }
 }
