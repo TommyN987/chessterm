@@ -37,6 +37,7 @@ impl Game {
         match direction {
             Direction::Up => self.menu_state.previous(),
             Direction::Down => self.menu_state.next(),
+            _ => {}
         }
     }
 

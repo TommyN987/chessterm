@@ -1,5 +1,4 @@
-pub const MENU_ITEMS: [&'static str; 4] =
-    ["Human vs. Human", "Human vs. Engine", "Online Game", "Help"];
+pub const MENU_ITEMS: [&str; 4] = ["Human vs. Human", "Human vs. Engine", "Online Game", "Help"];
 
 #[derive(Debug, Clone)]
 pub struct MenuState {

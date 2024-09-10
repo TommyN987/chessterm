@@ -98,6 +98,22 @@ impl MessageHandler {
     fn handle_game_key_events(&self, key_event: KeyEvent, game: &mut Game) -> AppResult<()> {
         match key_event.code {
             KeyCode::Char('q') => game.quit(),
+            KeyCode::Up | KeyCode::Char('k') => game.board.move_cursor(Direction::Up),
+            KeyCode::Down | KeyCode::Char('j') => game.board.move_cursor(Direction::Down),
+            KeyCode::Left | KeyCode::Char('h') => game.board.move_cursor(Direction::Left),
+            KeyCode::Right | KeyCode::Char('l') => game.board.move_cursor(Direction::Right),
+            KeyCode::Enter => {
+                let cursor_position = game.board.cursor_position.clone();
+                if let Some(legal_moves) = &game.board.currently_legal_moves {
+                    if legal_moves.contains(&cursor_position) {
+                        game.board.move_piece(&cursor_position);
+                    } else {
+                        game.board.select_position(&cursor_position);
+                    }
+                } else {
+                    game.board.select_position(&cursor_position);
+                }
+            }
             _ => {}
         };
         Ok(())

@@ -2,7 +2,7 @@ use ratatui::{
     buffer::Buffer,
     layout::{Alignment, Rect},
     style::{Color, Style, Stylize},
-    widgets::{Block, Padding, Paragraph, Widget},
+    widgets::{Paragraph, Widget},
 };
 
 use crate::model::{Piece, PieceColor, PieceType};

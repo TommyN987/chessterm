@@ -10,7 +10,6 @@ impl Move for Rook {
             .get_piece_color_in_position(selected_position.clone())
             .unwrap();
 
-        // Explore moves in all four directions using recursion
         explore_moves(&selected_position, &mut legal_moves, board, color, 1, 0);
         explore_moves(&selected_position, &mut legal_moves, board, color, -1, 0);
         explore_moves(&selected_position, &mut legal_moves, board, color, 0, 1);

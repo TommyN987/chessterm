@@ -9,4 +9,6 @@ pub use pieces::*;
 pub enum Direction {
     Down,
     Up,
+    Left,
+    Right,
 }

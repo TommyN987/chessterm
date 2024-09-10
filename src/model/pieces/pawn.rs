@@ -46,20 +46,26 @@ impl Pawn {
             }
         };
 
-        // Check for possible captures
-        if let Some(color) = board.get_piece_color_in_position(Position { x: x - 1, y: y - 1 }) {
-            match color {
-                PieceColor::White => {}
-                PieceColor::Black => legal_moves.push(Position { x: x - 1, y: y - 1 }),
-            }
-        };
+        if y > 0 {
+            // Check for possible captures
+            if let Some(color) = board.get_piece_color_in_position(Position { x: x - 1, y: y - 1 })
+            {
+                match color {
+                    PieceColor::White => {}
+                    PieceColor::Black => legal_moves.push(Position { x: x - 1, y: y - 1 }),
+                }
+            };
+        }
 
-        if let Some(color) = board.get_piece_color_in_position(Position { x: x - 1, y: y + 1 }) {
-            match color {
-                PieceColor::White => {}
-                PieceColor::Black => legal_moves.push(Position { x: x - 1, y: y + 1 }),
-            }
-        };
+        if y < 7 {
+            if let Some(color) = board.get_piece_color_in_position(Position { x: x - 1, y: y + 1 })
+            {
+                match color {
+                    PieceColor::White => {}
+                    PieceColor::Black => legal_moves.push(Position { x: x - 1, y: y + 1 }),
+                }
+            };
+        }
 
         legal_moves
     }
@@ -84,20 +90,26 @@ impl Pawn {
             }
         };
 
-        // Check for possible captures
-        if let Some(color) = board.get_piece_color_in_position(Position { x: x + 1, y: y - 1 }) {
-            match color {
-                PieceColor::White => legal_moves.push(Position { x: x + 1, y: y - 1 }),
-                PieceColor::Black => {}
-            }
-        };
+        if y > 0 {
+            // Check for possible captures
+            if let Some(color) = board.get_piece_color_in_position(Position { x: x + 1, y: y - 1 })
+            {
+                match color {
+                    PieceColor::White => legal_moves.push(Position { x: x + 1, y: y - 1 }),
+                    PieceColor::Black => {}
+                }
+            };
+        }
 
-        if let Some(color) = board.get_piece_color_in_position(Position { x: x + 1, y: y + 1 }) {
-            match color {
-                PieceColor::White => legal_moves.push(Position { x: x + 1, y: y + 1 }),
-                PieceColor::Black => {}
-            }
-        };
+        if y < 7 {
+            if let Some(color) = board.get_piece_color_in_position(Position { x: x + 1, y: y + 1 })
+            {
+                match color {
+                    PieceColor::White => legal_moves.push(Position { x: x + 1, y: y + 1 }),
+                    PieceColor::Black => {}
+                }
+            };
+        }
 
         legal_moves
     }
